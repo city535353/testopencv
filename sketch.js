@@ -30,7 +30,7 @@ function setup() {
        learningRate: 0.0001,
        hiddenUnits: 100,
        epochs: 20,
-       numClasses: 2,
+       numClasses: 3,
        batchSize: 0.4, 
     } 
   ,modelReady);
