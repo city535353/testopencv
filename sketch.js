@@ -18,7 +18,7 @@ function setup() {
 // 定義要取得的影音內容，包含影像和聲音
 let constraints = {
   audio: false,
-  video: { facingMode: { exact: "environment" } }
+  //video: { facingMode: { exact: "environment" } }
 }
   
 let inputVideo = document.querySelector('#inputVideo')
