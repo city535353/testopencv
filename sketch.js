@@ -1,118 +1,87 @@
 // Copyright (c) 2018 ml5
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
 /* ===
-ML5 Example
-KNN_Image
-KNN Image Classifier example with p5.js
+ml5 Example
+Image Classification using Feature Extraction with MobileNet. Built with p5.js
 === */
 
-let knn;
+let featureExtractor;
+let classifier;
 let video;
+let loss;
+let dogImages = 0;
+let catImages = 0;
 
 function setup() {
   noCanvas();
-  video = createCapture(VIDEO).parent('videoContainer');
-  // Create a KNN Image Classifier
-  knn = new ml5.KNNImageClassifier(2, 1, modelLoaded, video.elt);
+  // Create a video element
+  video = createCapture(VIDEO);
+  // Append it to the videoContainer DOM element
+  video.parent('videoContainer');
+  // Extract the already learned features from MobileNet
+  featureExtractor = ml5.featureExtractor('MobileNet', modelReady);
+  // Create a new classifier using those features and give the video we want to use
+  classifier = featureExtractor.classification(video);
+  // Create the UI buttons
   createButtons();
 }
 
+// A function to be called when the model has been loaded
+function modelReady() {
+  select('#loading').html('Base Model (MobileNet) loaded!');
+}
+
+// Add the current frame from the video to the classifier
+function addImage(label) {
+  classifier.addImage(label);
+}
+
+// Classify the current frame.
+function classify() {
+  classifier.classify(gotResults);
+}
+
+// A util function to create UI buttons
 function createButtons() {
-  // Save and Load buttons
-  save = select('#save');
-  save.mousePressed(function() {
-    knn.save('test');
-  });
-
- load = select('#load');
- load.mousePressed(function() {
-    knn.load('KNN-preload.json', updateExampleCounts);
-  });
-
-
-  // Train buttons
-  buttonA = select('#buttonA');
+  // When the Cat button is pressed, add the current frame
+  // from the video with a label of "cat" to the classifier
+  buttonA = select('#catButton');
   buttonA.mousePressed(function() {
-    train(1);
+    addImage('cat');
+    select('#amountOfCatImages').html(catImages++);
   });
 
-  buttonB = select('#buttonB');
+  // When the Dog button is pressed, add the current frame
+  // from the video with a label of "dog" to the classifier
+  buttonB = select('#dogButton');
   buttonB.mousePressed(function() {
-    train(2);
+    addImage('dog');
+    select('#amountOfDogImages').html(dogImages++);
   });
 
-  // Reset buttons
-  resetBtnA = select('#resetA');
-  resetBtnA.mousePressed(function() {
-    clearClass(1);
-    updateExampleCounts();
-  });
-
-  resetBtnB = select('#resetB');
-  resetBtnB.mousePressed(function() {
-    clearClass(2);
-    updateExampleCounts();
+  // Train Button
+  train = select('#train');
+  train.mousePressed(function() {
+    classifier.train(function(lossValue) {
+      if (lossValue) {
+        loss = lossValue;
+        select('#loss').html('Loss: ' + loss);
+      } else {
+        select('#loss').html('Done Training! Final Loss: ' + loss);
+      }
+    });
   });
 
   // Predict Button
   buttonPredict = select('#buttonPredict');
-  buttonPredict.mousePressed(predict);
-}
-
-// A function to be called when the model has been loaded
-function modelLoaded() {
-  select('#loading').html('Model loaded!');
-}
-
-// Train the Classifier on a frame from the video.
-function train(category) {
-  let msg;
-  if (category == 1) {
-    msg = 'A';
-  } else if (category == 2) {
-    msg = 'B';
-  }
-  select('#training').html(msg);
-  knn.addImageFromVideo(category);
-  updateExampleCounts();
-}
-
-// Predict the current frame.
-function predict() {
-  knn.predictFromVideo(gotResults);
+  buttonPredict.mousePressed(classify);
 }
 
 // Show the results
-function gotResults(results) {
-  let msg;
-
-  if (results.classIndex == 1) {
-    msg = 'A';
-  } else if (results.classIndex == 2) {
-    msg = 'B';
-  }
-  select('#result').html(msg);
-
-  // Update confidence
-  select('#confidenceA').html(results.confidences[1]);
-  select('#confidenceB').html(results.confidences[2]);
-
-  setTimeout(function(){
-    predict();
-  }, 50);
-}
-
-// Clear the data in one class
-function clearClass(classIndex) {
-  knn.clearClass(classIndex);
-}
-
-// Update the example count for each class
-function updateExampleCounts() {
-  let counts = knn.getClassExampleCount();
-  select('#exampleA').html(counts[1]);
-  select('#exampleB').html(counts[2]);
+function gotResults(result) {
+  select('#result').html(result);
+  classify();
 }
