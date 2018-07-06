@@ -14,7 +14,7 @@ let video;
 let loss;
 let dogImages = 0;
 let catImages = 0;
-
+let fishImages = 0;
 function setup() {
   noCanvas();
   // Create a video element
@@ -62,6 +62,12 @@ function createButtons() {
     select('#amountOfDogImages').html(dogImages++);
   });
 
+  buttonC = select('#fishButton');
+  buttonC.mousePressed(function() {
+    addImage('fish');
+    select('#amountOfFishImages').html(fishImages++);
+  });
+  
   // Train Button
   train = select('#train');
   train.mousePressed(function() {

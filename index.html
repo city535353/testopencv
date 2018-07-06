@@ -38,22 +38,25 @@
 </head>
 
 <body>
-  <h2>Image Classification using Feature Extraction with MobileNet. Built with p5.js</h2>
-  <h3>(Train a Neural Network to distinguish between your Cat or Dog poses)</h3>
-  <div id="videoContainer"></div>
+  <h2>圖片分類技術-監督式學習</h2>
+  <h3>使用 CNN 機器學習做出猜拳機器人</h3>
+  
   <h6 id="loading">Loading base model...</h6>
   <p>
-    <button id="catButton">Add Cat Image</button>
-    <p><span id="amountOfCatImages">0</span> Cat Images</p>
-    <br><button id="dogButton">Add Dog Image</button>
-    <p><span id="amountOfDogImages">0</span> Dog Images</p>
+    <button id="catButton">加入剪刀的圖片</button>
+    <p><span id="amountOfCatImages">0</span> 張剪刀圖片</p>
+    <br><button id="dogButton">加入石頭的圖片</button>
+    <p><span id="amountOfDogImages">0</span> 張石頭圖片</p>
+	<br><button id="fishButton">加入布的圖片</button>
+    <p><span id="amountOfFishImages">0</span> 張布圖片</p>
   </p>
   <br/>
-  <p><button id="train">Train</button><span id="loss"></span></p>
+  <p><button id="train">訓練AI</button><span id="loss"></span></p>
   <br/>
   <p>
-    <button id="buttonPredict">Start guessing!</button><br>
-    Your custom model labeled this as: <span id="result">...</span>
+    <button id="buttonPredict">猜拳開始</button><br>
+	<div id="videoContainer"></div>
+    你出的拳是: <span id="result">...</span>
   </p>
   <script src="sketch.js"></script>
 </body>
