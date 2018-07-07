@@ -58,13 +58,16 @@ function gotResults(results) {
   let msg;
 
   if (results.classIndex == 1) {
-    msg = '剪刀';
+    //msg = '剪刀';
+	document.getElementById("myImg").src = "p2.png";
   } else if (results.classIndex == 2) {
-    msg = '石頭';
+    //msg = '石頭';
+	document.getElementById("myImg").src = "p3.png";
   } else if (results.classIndex == 3) {
-    msg = '布';
+    //msg = '布';
+	document.getElementById("myImg").src = "p1.png";
   }
-  select('#result').html(msg);
+  //select('#result').html(msg);
 
   setTimeout(function(){
     predict();
