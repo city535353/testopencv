@@ -29,7 +29,7 @@ function createButtons() {
 
  load = select('#load');
  load.mousePressed(function() {
-    knn.load('KNN-preload.json', updateExampleCounts);
+    knn.load('test.json', updateExampleCounts);
   });
 
 
